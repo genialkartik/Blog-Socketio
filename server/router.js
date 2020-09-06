@@ -1,23 +1,33 @@
 const express = require('express')
-const { json } = require('express')
 const rtr = express.Router()
 const User = require('./middleware/auth')
 
 const user = new User()
-let loggedin = false;
+let logStatus = false;
 
 rtr.get('/', (req, res) => {
-    res.send('sever is running.')
+    res.send('sever is running.  If It doesnt work look here for alternative: Github: https://github.com/genialkartik/Blog-Socketio  GitPod (IDE): https://gitpod.io/start/#bd8ae49e-acfc-4843-a602-d2df1fe1502c')
 })
 
-rtr.get('/login', function (req, res, next) {
-    console.log(req.query)
-    user.find(result => {
-        if (result.length) {
-            res.redirect('/blogs')
+rtr.get('/login', (req, res) => {
+    res.json({logdin: false})
+})
+
+rtr.get('/signin', function (req, res, next) {
+    var r = req.query;
+    var username = r.email;
+    var password = r.pwd;
+    var temp = {
+        uname: username,
+        pwd: password
+    }
+    user.login(temp, result => {
+        if (result == 1) {
+            logStatus = true;
+            res.json({ logdin: true })
         }
         else {
-            res.redirect('/')
+            res.json({ logdin: false })
         }
     })
 });
@@ -31,8 +41,11 @@ var blogdata = [
 ]
 
 rtr.get('/blogs', (req, res) => {
-    console.log('get blogs')
-    res.json(blogdata)
+    if(logStatus == true){
+        res.json(blogdata)
+    }else{
+        res.json(logStatus)
+    }
 })
 rtr.get('/blogdesc', (req, res) => {
     var blogid = Number(req.query.id)

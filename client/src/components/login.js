@@ -48,61 +48,84 @@ export default function LoginPage(props) {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [loggedin, setLogin] = useState(false)
 
 
   function signIn() {
-    history.pushState('/blogs')
     console.log('sign in')
-    axios.get('/login', { params: { email: email, pwd: password } })
-      .then(res => (
-        props.history.forward('/blogs')
-      ))
+    axios.get('/signin', { params: { email: email, pwd: password } })
+      .then(res => {
+        console.log(res.data.logdin)
+        if(res.data.logdin === true){
+          setLogin(true)
+        }else{
+          alert('working credentials')
+        }
+      })
   }
 
   return (
-    <Grid container component="main" className={classes.root}>
-      <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
+    <div>
+
+      <Grid container component="main" className={classes.root}>
+        <CssBaseline />
+        <Grid item xs={false} sm={4} md={7} className={classes.image} />
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          {(loggedin === false) ?
+            <div className={classes.paper}>
+              <Avatar className={classes.avatar}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                Sign in
           </Typography>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            placeholder="enter email"
-            className="useremail"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            placeholder="enter password"
-            className="userpassword"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Button
-            onClick={signIn}
-          >
-            Sign In
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                placeholder="enter email"
+                className="useremail"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                placeholder="enter password"
+                className="userpassword"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <br />
+              <div><b>Guest Login: </b><span>root</span></div>
+              <div><b>Guest Pswrd: </b><span>toor</span></div>
+              <br />
+              <Button
+                style={{ backgroundColor: 'blue' }}
+                onClick={signIn}
+              >
+                Sign In
             </Button>
-        </div>
+            </div> :
+            <div className={classes.paper}>
+              <div><p>Logged In Successfully</p></div>
+              <a href="/blogs">
+                <Button
+                  style={{ backgroundColor: 'blue' }}
+                >View Blogs</Button>
+              </a>
+            </div>
+          }
+        </Grid>
       </Grid>
-    </Grid>
+    </div>
   );
 }

@@ -25,7 +25,6 @@ const PostPage = ({ location }) => {
       setCurV(currentViewers)
     });
   }, [ENDPOINT, location.search])
-  console.log(blogdata)
 
   return (
     <div>

@@ -1,34 +1,32 @@
 
-function User() {};
+function User() { };
 
 var users = [
-    {
-      uname: 'guest',
-      pwd: 'password'
-    },
-    {
-      uname: 't',
-      pwd: 't'
-    }
-  ]
-
-  var sessionuser = []
+  {
+    uname: 'root',
+    pwd: 'toor'
+  },
+  {
+    uname: 't',
+    pwd: 't'
+  }
+]
 
 User.prototype = {
-    
-    login : function(user, callback)
-    {
-        for(var i=0; i<users.length; i++){
-            if(user.uname == users[i].uname && user.pwd == users[i].pwd){
-                sessionuser.push(user)
-                callback (1)
-            }
-        }
-    },
-    find: function(callback)
-    {
-        callback (sessionuser)
+
+  login: function (user, callback) {
+    let found = false;
+    for (var i = 0; i < users.length; i++) {
+      if (user.uname == users[i].uname && user.pwd == users[i].pwd) {
+        found = true;
+        break;
+      }
     }
+    if (found == true)
+      callback(1)
+    else
+      callback(0)
+  }
 
 }
 

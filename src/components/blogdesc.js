@@ -1,0 +1,61 @@
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom'
+import axios from 'axios'
+import queryStr from 'query-string'
+import io from 'socket.io-client'
+import './blogdesc.css'
+
+let socket;
+
+const PostPage = ({ location }) => {
+  const ENDPOINT = 'https://blogpratilipi.herokuapp.com/'
+  const [blogdata, setBlogdata] = useState()
+  const [curV, setCurV] = useState(0)
+
+  useEffect(() => {
+    // TC = total view count
+    const { id } = queryStr.parse(location.search)
+    // setBlogdata([id, title, desc, TC])
+    socket = io(ENDPOINT)
+    const headers = {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    }
+    axios.get('/blogdesc', { params: { id: id } })
+      .then(res => {
+        setBlogdata(res.data)
+      })
+    socket.emit('showBlog', { id }, (currentViewers) => {
+      console.log(currentViewers)
+      setCurV(currentViewers)
+    });
+  }, [ENDPOINT, location.search])
+
+  return (
+    <div>
+      <Link to={`/blogs`}><button>Show Blogs</button></Link>
+      {(blogdata) ?
+        <div>
+          <h1>Blog Description</h1>
+          <div className="title">
+            <h1 style={{color: 'white'}}>{blogdata.title}</h1>
+          </div>
+          <ul className="desc">
+            <li><h4>Total Number of view: </h4></li>
+            <li> {blogdata.TC}</li>
+            <li><h4>Currently Viewers: </h4></li>
+            <li> {curV}</li>
+          </ul>
+          <br />
+          <div className="todo">
+            <h1>Post</h1>
+            <pre>{blogdata.desc}</pre>
+          </div>
+          <br /><br /><br />
+        </div> : <p>Loading</p>
+      }
+    </div>
+  );
+}
+
+export default PostPage;

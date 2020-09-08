@@ -81,11 +81,11 @@ const BlogPage = () => {
           }</div> :
           <div>
             <div><p>You're not logged In. Kindly, login first.</p></div>
-            <a href="/login">
+            <Link to={`/login`}>
               <Button
                 style={{ backgroundColor: 'blue' }}
               >Login</Button>
-            </a>
+            </Link>
           </div>
       }
     </div>

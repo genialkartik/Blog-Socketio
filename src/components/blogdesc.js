@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import queryStr from 'query-string'
 import io from 'socket.io-client'
@@ -16,6 +17,10 @@ const PostPage = ({ location }) => {
     const { id } = queryStr.parse(location.search)
     // setBlogdata([id, title, desc, TC])
     socket = io(ENDPOINT)
+    const headers = {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    }
     axios.get('/blogdesc', { params: { id: id } })
       .then(res => {
         setBlogdata(res.data)
@@ -28,7 +33,7 @@ const PostPage = ({ location }) => {
 
   return (
     <div>
-      <a href="/blogs"><button>Show All Blogs</button></a>
+      <Link to={`/blogs`}><button>Show Blogs</button></Link>
       {(blogdata) ?
         <div>
           <h1>Blog Description</h1>

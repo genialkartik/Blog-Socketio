@@ -2,15 +2,28 @@ const express = require('express')
 const socketio = require('socket.io')
 const http = require('http')
 const cors = require('cors')
+const bodyParser = require('body-parser')
 const path = require('path')
-
 const app = express()
-const PORT = process.env.PORT || 2020
 
-const router = require('./router')
+app.use(express.static(path.join(__dirname, "../build")));
+const port = process.env.PORT || 2020
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
+
+app.use(express.static('dist'));
+const router = require('./routes/router')
 
 const server = http.createServer(app)
 const io = socketio(server)
+
+
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000/");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 app.use(cors())
 
@@ -30,23 +43,19 @@ io.on('connect', (socket) => {
   })
   socket.on('disconnect', () => {
     console.log('socket connection disconnected')
-    var blogid= Number(map2.get(socket.id))
+    var blogid = Number(map2.get(socket.id))
     map.set(blogid, map.get(Number(map2.get(socket.id))) - 1)
     map2.delete(socket.id)
-})
+  })
 })
 
 app.use(router)
 
-if (process.env.NODE_ENV === 'production') {
-  // Set static folder
-  app.use(express.static('client/build'));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  });
-}
 
-server.listen(PORT, () => {
-  console.log(`listening on PORT ${PORT}`)
+server.listen(port, () => {
+  console.log(`listening on PORT ${port}`)
 })

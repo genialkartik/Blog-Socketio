@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -117,11 +118,9 @@ export default function LoginPage(props) {
             </div> :
             <div className={classes.paper}>
               <div><p>Logged In Successfully</p></div>
-              <a href="/blogs">
-                <Button
-                  style={{ backgroundColor: 'blue' }}
-                >View Blogs</Button>
-              </a>
+              <Link to={`/blogs`}>
+                <Button>View Blogs</Button>
+              </Link>
             </div>
           }
         </Grid>

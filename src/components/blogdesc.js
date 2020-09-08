@@ -8,7 +8,7 @@ import './blogdesc.css'
 let socket;
 
 const PostPage = ({ location }) => {
-  const ENDPOINT = 'https://blogpratilipi.herokuapp.com/'
+  const ENDPOINT = 'http://localhost:2020/'
   const [blogdata, setBlogdata] = useState()
   const [curV, setCurV] = useState(0)
 

@@ -14,4 +14,4 @@ Working Prototype (Demo): [kartikpratilipi.herokuapp.com](https://kartikpratilip
 
 ## Concept Working in Behind:
 
-I've used Socket.io to count number of current viewers and mapped every unique socket id (current viewer id) to blog id (id of currently viewing blog) in 'map' variable of type Map and every blog id have it's frequency (number current viewers of that particular blog) mapped in 'map2' variable of type Map.
+I've used Socket.io to count the number of current viewers and mapped every unique socket id (current viewer id) to blog id (id of currently viewing blog) in 'map' variable of type Map and every blog id have it's frequency (number current viewers of that particular blog) mapped in 'map2' variable of type Map.
